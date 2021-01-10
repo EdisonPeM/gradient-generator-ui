@@ -5,18 +5,55 @@ import { GradientUI } from './GradientUI';
 import { ColorControl } from './ColorControl';
 import { GeneratorManager, ManagerOptions } from './Manager';
 
-export class GradientGenerator {
-  private UI: GradientUI;
+const initialGradientColors: colorPos[] = [
+  {
+    colorHex: '#ff0000',
+    position: 10,
+  },
+  {
+    colorHex: '#ffff00',
+    position: 40,
+  },
+  {
+    colorHex: '#00ff77',
+    position: 70,
+  },
+];
 
-  constructor(private mainElement: HTMLElement, initialColors?: colorPos[]) {
-    if (!mainElement) throw new Error('Root element must be provided');
-    this.UI = new GradientUI(mainElement, initialColors);
+export class GradientGenerator {
+  private UI: GradientUI | null = null;
+  private mainElement: HTMLElement | null = null;
+  private colors: colorPos[];
+
+  constructor({
+    mainElement,
+    initialColors = initialGradientColors,
+  }: {
+    mainElement?: HTMLElement;
+    initialColors: colorPos[];
+  }) {
+    if (mainElement) {
+      this.mainElement = mainElement;
+      this.UI = new GradientUI(mainElement, initialColors);
+      this.UI.onUpdateControls((controls: ColorControl[]) => {
+        this.colors = controls.map(ctrl => ({
+          colorHex: ctrl.ColorHex,
+          position: ctrl.Position,
+        }));
+      });
+    }
+
+    this.colors = initialColors;
   }
 
   /**
    * Get the HTML Main Element
    */
   public getMainElement(): HTMLElement {
+    if (!this.mainElement) {
+      throw new Error('There is no main element in the generator');
+    }
+
     return this.mainElement;
   }
 
@@ -24,13 +61,7 @@ export class GradientGenerator {
    * Get the list of colors with their respective proportional position
    */
   public getGradientColors(): colorPos[] {
-    const gradientControls = this.UI.getGradientControls();
-    return gradientControls.map(
-      (cc: ColorControl): colorPos => ({
-        colorHex: cc.ColorHex,
-        position: cc.Position,
-      })
-    );
+    return this.colors;
   }
 
   /**
@@ -38,7 +69,8 @@ export class GradientGenerator {
    * @param colors List of colors with their respective proportional position
    */
   public setGradientColors(colors: colorPos[]) {
-    this.UI.init(colors);
+    this.colors = colors;
+    if (this.UI) this.UI.init(colors);
   }
 
   /**
@@ -46,8 +78,15 @@ export class GradientGenerator {
    * @param color A single colors with their respective proportional position
    * @param indx Optional position to append in the GradientGenerator
    */
-  public append(color: colorPos, indx = -1) {
-    this.UI.addElement(color, indx);
+  public append(newColor: colorPos) {
+    const indx = this.colors.findIndex(gc => gc.position > newColor.position);
+    if (indx > -1) {
+      this.colors.splice(indx, 0, newColor);
+    } else {
+      this.colors.push(newColor);
+    }
+
+    if (this.UI) this.UI.addElement(newColor);
   }
 
   /**
@@ -60,7 +99,7 @@ export class GradientGenerator {
         colorHex: '#000000',
         position: 0,
       },
-      ...this.getGradientColors(),
+      ...this.colors,
       {
         colorHex: '#ffffff',
         position: 100,
@@ -74,7 +113,7 @@ export class GradientGenerator {
    * Generate a manager with the current GradientGenerator
    * @param options Manager options
    */
-  public createManager(options: ManagerOptions): GeneratorManager {
+  public createUIManager(options: ManagerOptions): GeneratorManager {
     return new GeneratorManager(this, options);
   }
 }

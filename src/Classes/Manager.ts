@@ -22,31 +22,23 @@ export class GeneratorManager {
     // Event to add new element
     mainElement.addEventListener('click', (ev: MouseEvent) => {
       if (this.addMode) {
-        const gradientColors = this.generator.getGradientColors();
+        const gradientColors: colorPos[] = [
+          { colorHex: '#000000', position: 0 },
+          ...this.generator.getGradientColors(),
+          { colorHex: '#ffffff', position: 100 },
+        ];
 
-        const cantColors = gradientColors.length;
         const newPosition = (ev.offsetX * 100) / mainElement.clientWidth;
         const indx = gradientColors.findIndex(gc => gc.position > newPosition);
 
-        let color1 = '#000000';
-        let color2 = '#ffffff';
-        if (cantColors > 0) {
-          if (indx < 0) {
-            color1 = gradientColors[cantColors - 1].colorHex;
-          } else if (indx === 0) {
-            color2 = gradientColors[0].colorHex;
-          } else {
-            color1 = gradientColors[indx - 1].colorHex;
-            color2 = gradientColors[indx].colorHex;
-          }
-        }
+        const color1 = gradientColors[indx - 1].colorHex;
+        const color2 = gradientColors[indx].colorHex;
 
-        const newColorPos: colorPos = {
+        generator.append({
           colorHex: getIntermediateColor(color1, color2),
           position: newPosition,
-        };
+        });
 
-        generator.append(newColorPos, indx);
         this.cancelAddMode();
         if (this.options.keepChanges) {
           this.cacheGradientColors = gradientColors;

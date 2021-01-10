@@ -1,7 +1,7 @@
 const gradientRoot = document.getElementById('gradient-root');
 
-const myColorGen = new GradientGenerator(gradientRoot);
-const myGenManager = myColorGen.createManager({ keepChanges: false });
+const myColorGen = new GradientGenerator({ mainElement: gradientRoot });
+const myGenManager = myColorGen.createUIManager({ keepChanges: false });
 
 const addBtn = document.getElementById('add');
 addBtn.addEventListener('click', () => {

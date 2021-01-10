@@ -1,28 +1,11 @@
 import { colorPos } from '../Types';
 import { ColorControl } from './ColorControl';
 
-const initialGradientColors: colorPos[] = [
-  {
-    colorHex: '#ff0000',
-    position: 10,
-  },
-  {
-    colorHex: '#ffff00',
-    position: 40,
-  },
-  {
-    colorHex: '#00ff77',
-    position: 70,
-  },
-];
-
 export class GradientUI {
   private gradientControls: ColorControl[] = [];
+  private observers: Array<(ctrls: ColorControl[]) => void> = [];
 
-  constructor(
-    private mainElement: HTMLElement,
-    initialColors: colorPos[] = initialGradientColors
-  ) {
+  constructor(private mainElement: HTMLElement, initialColors: colorPos[]) {
     this.init(initialColors);
   }
 
@@ -49,6 +32,14 @@ export class GradientUI {
   }
 
   /**
+   * Add an event listener when any color control change it values
+   * @param cb Callback
+   */
+  onUpdateControls(cb: (ctrls: ColorControl[]) => void) {
+    this.observers.push(cb);
+  }
+
+  /**
    * Get the list of color controls in the UI
    */
   public getGradientControls(): ColorControl[] {
@@ -60,14 +51,17 @@ export class GradientUI {
    * @param color A single colors with their respective proportional position
    * @param indx Optional position to append in the UI
    */
-  public addElement(color: colorPos, indx = -1) {
-    const newControl: ColorControl = new ColorControl(color);
+  public addElement(newColor: colorPos) {
+    const newControl: ColorControl = new ColorControl(newColor);
     const newElement = newControl.Element;
 
-    if (this.gradientControls[indx]) {
-      const nextElement = this.gradientControls[indx].Element;
+    const indx = this.gradientControls.findIndex(
+      gc => gc.Position > newColor.position
+    );
 
-      this.mainElement.insertBefore(newElement, nextElement);
+    if (indx > -1) {
+      const nextControl = this.gradientControls[indx];
+      this.mainElement.insertBefore(newElement, nextControl.Element);
       this.gradientControls.splice(indx, 0, newControl);
     } else {
       this.mainElement.appendChild(newElement);
@@ -80,14 +74,32 @@ export class GradientUI {
         els => els !== newControl
       );
       this.changeGradientBg();
+
+      this.observers.forEach(obs => obs(this.gradientControls));
     });
 
     newControl.onPositionChange(() => {
-      this.updatePositionsLimits();
+      let minlimit = 0;
+      let maxlimit = 100;
+      this.gradientControls.forEach((gc, indx) => {
+        const hasNext = indx + 1 !== this.gradientControls.length;
+        if (hasNext) {
+          const nextgc = this.gradientControls[indx + 1];
+          maxlimit = nextgc.Position;
+        } else {
+          maxlimit = 100;
+        }
+
+        gc.setPositionLimits(minlimit, maxlimit);
+        minlimit = gc.Position;
+      });
+
+      this.observers.forEach(obs => obs(this.gradientControls));
       this.changeGradientBg();
     });
 
     newControl.onColorChange(() => {
+      this.observers.forEach(obs => obs(this.gradientControls));
       this.changeGradientBg();
     });
 
@@ -115,25 +127,5 @@ export class GradientUI {
         linear-gradient(to right, #000000, #ffffff)
       `;
     }
-  }
-
-  /**
-   * Update the position limits for each color control with respect to the others
-   */
-  public updatePositionsLimits() {
-    let minlimit = 0;
-    let maxlimit = 100;
-    this.gradientControls.forEach((gc, indx) => {
-      const hasNext = indx + 1 !== this.gradientControls.length;
-      if (hasNext) {
-        const nextgc = this.gradientControls[indx + 1];
-        maxlimit = nextgc.Position;
-      } else {
-        maxlimit = 100;
-      }
-
-      gc.setPositionLimits(minlimit, maxlimit);
-      minlimit = gc.Position;
-    });
   }
 }

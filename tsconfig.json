@@ -14,14 +14,16 @@
     "esModuleInterop": true,
 
     //------------------
+    "rootDir": "src",
     "module": "commonjs" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */,
     "sourceMap": true,
     "lib": ["es2015", "dom"],
-    "declaration": true
+    "declaration": true,
+    "outDir": "lib",
 
-    // "allowSyntheticDefaultImports": true,
-    // "suppressImplicitAnyIndexErrors": true,
-    // "forceConsistentCasingInFileNames": true
+    "allowSyntheticDefaultImports": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]
