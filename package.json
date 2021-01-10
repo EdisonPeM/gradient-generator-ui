@@ -34,6 +34,7 @@
   "keywords": [],
   "license": "MIT",
   "dependencies": {
+    "mini-css-extract-plugin": "^1.3.3",
     "style-loader": "^2.0.0"
   }
 }

@@ -1,9 +1,35 @@
 import { colorPos } from './Types';
 import { getCorrectTextColor } from './ColorUtils';
 
-import './scss/gradientControl.scss';
-
 const e = document.createElement.bind(document);
+
+function createDeleteControl(): HTMLElement {
+  const deleteEl = e('button');
+  deleteEl.className = 'gg-control-delete';
+  deleteEl.innerHTML = '&times;';
+  return deleteEl;
+}
+
+function createPositionControl(defaultValue: string) {
+  const positionEl = e('input');
+  positionEl.className = 'gg-control-position';
+  positionEl.type = 'range';
+  positionEl.step = '1';
+  positionEl.min = '0';
+  positionEl.max = '100';
+  positionEl.dataset.min = '0';
+  positionEl.dataset.max = '100';
+  positionEl.defaultValue = defaultValue;
+  return positionEl;
+}
+
+function createValueControl(defaultValue: string) {
+  const valueEl = e('input');
+  valueEl.className = 'gg-control-value';
+  valueEl.type = 'color';
+  valueEl.defaultValue = defaultValue;
+  return valueEl;
+}
 
 export class ColorControl {
   private mainElement: HTMLElement;
@@ -11,53 +37,30 @@ export class ColorControl {
   private positionEl: HTMLInputElement;
   private valueEl: HTMLInputElement;
 
-  constructor(obj: colorPos) {
+  constructor(color: colorPos) {
     // Create main element
     this.mainElement = e('div');
     this.mainElement.className = 'gg-control';
 
     // Create delete button
-    this.deleteEl = e('button');
-    this.deleteEl.className = 'gg-control-delete';
-    this.deleteEl.innerHTML = '&times;';
-
-    this.deleteEl.addEventListener('click', () => {
-      this.mainElement.remove();
-    });
-
+    this.deleteEl = createDeleteControl();
+    // Create value color input
+    this.valueEl = createValueControl(color.colorHex);
     // Create position range input
-    this.positionEl = e('input');
-    this.positionEl.className = 'gg-control-position';
-    this.positionEl.type = 'range';
-    this.positionEl.step = '1';
-    this.positionEl.min = '0';
-    this.positionEl.max = '100';
-    this.positionEl.dataset.min = '0';
-    this.positionEl.dataset.max = '100';
-    this.positionEl.defaultValue = obj.position.toString();
-
+    this.positionEl = createPositionControl(color.position.toString());
     this.positionEl.addEventListener('input', function (ev) {
-      if (this.dataset.min && +this.value < +this.dataset.min)
+      if (this.dataset.min && this.valueAsNumber < +this.dataset.min)
         this.value = this.dataset.min;
 
-      if (this.dataset.max && +this.value > +this.dataset.max)
+      if (this.dataset.max && this.valueAsNumber > +this.dataset.max)
         this.value = this.dataset.max;
     });
-    this.positionEl.addEventListener('input', () => {
-      this.changePosition();
-    });
-    window.addEventListener('resize', () => {
-      this.changePosition();
-    });
 
-    // Create value color input
-    this.valueEl = e('input');
-    this.valueEl.className = 'gg-control-value';
-    this.valueEl.type = 'color';
-    this.valueEl.value = obj.colorHex;
-    this.valueEl.addEventListener('input', () => {
-      this.changeBg();
-    });
+    // Add Basic Listeners
+    this.onDelete(() => this.mainElement.remove());
+    this.onColorChange(() => this.changeBg());
+    this.onPositionChange(() => this.changePosition());
+    window.addEventListener('resize', () => this.changePosition());
 
     // Config First View
     setTimeout(() => {
@@ -70,6 +73,19 @@ export class ColorControl {
       this.changePosition();
       this.changeBg();
     });
+  }
+
+  // Getters
+  public get Element(): HTMLElement {
+    return this.mainElement;
+  }
+
+  public get ColorHex(): string {
+    return this.valueEl.value;
+  }
+
+  public get Position(): number {
+    return this.positionEl.valueAsNumber;
   }
 
   // Inherit Actions
@@ -92,30 +108,17 @@ export class ColorControl {
     this.positionEl.style.setProperty('--color', getCorrectTextColor(color));
   }
 
-  // Getters
-  public get Element(): HTMLElement {
-    return this.mainElement;
-  }
-
-  public get ColorHex(): string {
-    return this.valueEl.value;
-  }
-
-  public get Position(): number {
-    return this.positionEl.valueAsNumber;
-  }
-
   // Events
   public onDelete(cb: Function) {
-    this.deleteEl.onclick = (ev: MouseEvent) => cb(ev);
+    this.deleteEl.addEventListener('click', (ev: MouseEvent) => cb(ev));
   }
 
   public onPositionChange(cb: Function) {
-    this.positionEl.oninput = (ev: Event) => cb(ev);
+    this.positionEl.addEventListener('input', (ev: Event) => cb(ev));
   }
 
   public onColorChange(cb: Function) {
-    this.valueEl.oninput = (ev: Event) => cb(ev);
+    this.valueEl.addEventListener('input', (ev: Event) => cb(ev));
   }
 
   // Add limits

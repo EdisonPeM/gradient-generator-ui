@@ -29,9 +29,9 @@ export function getIntermediateColor(hex1: string, hex2: string) {
   const rgb2 = hexToRGb(hex2);
 
   const newRGB = {
-    r: (rgb2.r + rgb1.r) / 2,
-    g: (rgb2.g + rgb1.g) / 2,
-    b: (rgb2.b + rgb1.b) / 2,
+    r: Math.round((rgb2.r + rgb1.r) / 2),
+    g: Math.round((rgb2.g + rgb1.g) / 2),
+    b: Math.round((rgb2.b + rgb1.b) / 2),
   };
 
   return rgbToHex(newRGB);

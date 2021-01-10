@@ -1,9 +1,20 @@
 const gradientRoot = document.getElementById('gradient-root');
 
 const myColorGen = new GradientGenerator(gradientRoot);
-const colors = myColorGen.generateColors();
+const myGenManager = myColorGen.createManager({ keepChanges: false });
 
-const myGenManager = myColorGen.createManager();
-console.log(myColorGen.getGradientColors());
-console.log(colors);
-console.dir(myGenManager);
+const addBtn = document.getElementById('add');
+addBtn.addEventListener('click', () => {
+  myGenManager.setAddMode();
+});
+
+const cancelBtn = document.getElementById('cancel');
+cancelBtn.addEventListener('click', () => {
+  myGenManager.restoreColors();
+});
+
+const getColorsBtn = document.getElementById('getColors');
+getColorsBtn.addEventListener('click', () => {
+  const colors = myColorGen.generateColors();
+  console.log(colors);
+});
