@@ -1,3 +1,3 @@
-# Gradient Generator
+# Gradient Generator UI
 
-Librería para crear un generador de gradiantes en HTML
+Library to create a gradient generator in vanilla-js with interactive user interface in html
