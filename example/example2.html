@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examples of Gradient Generator</title>
+
+  <link rel="stylesheet" type="text/css" href="../dist/gradient-generator.css">
+  <style>
+    #root {
+      width: 100%;
+      height: 80vh;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Gradiente Generator is Charged</h1>
+  <div id="root"></div>
+
+  <script src="../dist/gradient-generator.js"></script>
+  <script>
+    const myGen = new GradientGenerator({
+      initialColors: [
+        { colorHex: "#f00", position: 0 },
+        { colorHex: "#0f0", position: 80 },
+      ]
+    })
+
+    const root = document.getElementById('root')
+    console.log(root);
+    myGen.append({
+      colorHex: "#00f", position: 10
+    })
+
+    console.log(myGen.getGradientColors());
+
+    const colors = myGen.getGradientColors()
+    console.log(colors);
+    const bg = `linear-gradient(${colors.map(cl => `${cl.colorHex} ${cl.position}%`).join()})`
+    console.log(bg);
+    root.style.background = bg;
+    console.log(root.style.background);
+
+    console.log(myGen.generateColors());
+  </script>
+</body>
+
+</html>

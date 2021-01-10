@@ -1,11 +1,12 @@
 {
-  "name": "gradient-generator",
+  "name": "gradient-generator-ui",
   "version": "1.0.0",
   "private": true,
   "main": "lib/index.js",
-  "SideEffects": false,
+  "sideEffects": false,
   "scripts": {
-    "build": "tsc --ourDir lib",
+    "build": "yarn build:dist && yarn build:lib",
+    "build:lib": "tsc --outDir lib",
     "build:dist": "webpack --mode production",
     "start:dev": "webpack --mode development --watch"
   },

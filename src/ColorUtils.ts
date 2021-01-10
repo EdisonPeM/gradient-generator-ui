@@ -1,11 +1,26 @@
 import { colorPos, colorRGB } from './Types';
 
 /**
- * Separate the head (#) from the color string
+ * Normalize the hexadecimal color Separate the head (#) and transform 3digits to 6
  * @param hex String of Color in hexadecimal format
  */
-function cutHex(hex: string): string {
-  return hex.charAt(0) == '#' ? hex.substring(1, 7) : hex;
+function normalizeHex(hex: string): string {
+  const match7 = hex.match(/\w{6}$/);
+  if (match7 !== null) {
+    console.log(match7[0]);
+
+    return match7[0];
+  }
+
+  const match4 = hex.match(/\w{3}$/);
+  if (match4) {
+    return match4[0]
+      .split('')
+      .map(n => n.repeat(2))
+      .join('');
+  }
+
+  return hex;
 }
 
 /**
@@ -14,9 +29,9 @@ function cutHex(hex: string): string {
  */
 export function hexToRGb(hex: string): colorRGB {
   return {
-    r: parseInt(cutHex(hex).substring(0, 2), 16),
-    g: parseInt(cutHex(hex).substring(2, 4), 16),
-    b: parseInt(cutHex(hex).substring(4, 6), 16),
+    r: parseInt(normalizeHex(hex).substring(0, 2), 16),
+    g: parseInt(normalizeHex(hex).substring(2, 4), 16),
+    b: parseInt(normalizeHex(hex).substring(4, 6), 16),
   };
 }
 
