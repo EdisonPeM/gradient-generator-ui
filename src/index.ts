@@ -1,15 +1,5 @@
-export class GradientGenerator {
-  constructor(public node: HTMLElement) {
-    if (!node) {
-      throw new Error('Root element must be provided');
-    }
-  }
+export type { colorRGB, colorPos } from './Types';
+export { createGradient, hexToRGb, rgbToHex } from './ColorUtils';
 
-  getElement(): HTMLElement {
-    return this.node;
-  }
-
-  generate(size: number) {
-    this.node.innerHTML = 'hola ' + size;
-  }
-}
+export { GeneratorManager } from './Manager';
+export { GradientGenerator } from './Generator';

@@ -1,3 +1,9 @@
 const gradientRoot = document.getElementById('gradient-root');
 
-const myGen = new GradientGenerator(gradientRoot);
+const myColorGen = new GradientGenerator(gradientRoot);
+const colors = myColorGen.generateColors();
+
+const myGenManager = myColorGen.createManager();
+console.log(myColorGen.getGradientColors());
+console.log(colors);
+console.dir(myGenManager);

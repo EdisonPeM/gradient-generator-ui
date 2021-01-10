@@ -1,0 +1,213 @@
+.gg-control {
+  height: 100%;
+  grid-column: 1;
+  grid-row: 1;
+  pointer-events: none;
+
+  /* ----------------------------------- */
+  /*      Styles to colors controls      */
+  /* ----------------------------------- */
+  .gg-control-delete,
+  .gg-control-value {
+    pointer-events: auto;
+    cursor: pointer;
+
+    position: absolute;
+    left: var(--pos-left);
+
+    transform: translateX(-50%);
+  }
+
+  /* ----------------------------------- */
+  /*   Styles to delete button control   */
+  /* ----------------------------------- */
+  .gg-control-delete {
+    --gb-color: #fff;
+    --color: #000;
+
+    border: 1px solid var(--color);
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 3px 7px;
+
+    background: var(--gb-color);
+    color: var(--color);
+    top: 10px;
+  }
+
+  /* ----------------------------------- */
+  /*    Styles to color value control    */
+  /* ----------------------------------- */
+  .gg-control-value {
+    width: 10px;
+    bottom: 10px;
+
+    // Experimental only with chrome
+    &::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    &::-webkit-color-swatch {
+      border: none;
+    }
+  }
+
+  /* ----------------------------------- */
+  /*      Styles to position control     */
+  /* ----------------------------------- */
+  .gg-control-position {
+    --gb-color: #fff;
+    --color: #000;
+
+    width: 100%;
+    height: 100%;
+    margin: 0;
+
+    background: none;
+    pointer-events: none;
+    outline: none;
+
+    @mixin aparence-none {
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    @mixin track-style {
+      width: 100%;
+      height: 100%;
+    }
+
+    @mixin thumb-style {
+      width: 10px;
+      height: 100%;
+
+      border-radius: 10px;
+      background: var(--gb-color);
+      border: 1px solid var(--color);
+
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    // Aparences
+    @include aparence-none;
+
+    // Suport to chrome and others
+    &::-webkit-slider-thumb,
+    &::-webkit-slider-runnable-track {
+      @include aparence-none;
+    }
+    &::-webkit-slider-thumb {
+      @include thumb-style;
+    }
+    &::-webkit-slider-runnable-track {
+      @include track-style;
+    }
+
+    // Mozilla Firefox
+    &::-moz-range-thumb,
+    &::-moz-range-track {
+      @include aparence-none;
+    }
+    &::-moz-range-thumb {
+      @include thumb-style;
+    }
+    &::-moz-range-track {
+      @include track-style;
+    }
+
+    // Suppoert to IE
+    &::-ms-track,
+    &::-ms-thumb {
+      @include aparence-none;
+    }
+    &::-ms-track {
+      @include track-style;
+    }
+    &::-ms-thumb {
+      @include thumb-style;
+    }
+  }
+
+  @media (min-width: 586px) {
+    .gg-control-value {
+      width: 15px;
+    }
+    .gg-control-position {
+      &::-webkit-slider-thumb {
+        width: 15px;
+      }
+      &::-moz-range-thumb {
+        width: 15px;
+      }
+      &::-ms-thumb {
+        width: 15px;
+      }
+    }
+  }
+
+  /* ----------------------------------- */
+  /*         Styles to interactive       */
+  /* ----------------------------------- */
+  // NORMAL
+  .gg-control-delete,
+  .gg-control-value {
+    opacity: 0.4;
+    outline: none;
+  }
+  .gg-control-position {
+    &::-webkit-slider-thumb {
+      opacity: 0.4;
+      outline: none;
+    }
+    &::-moz-range-thumb {
+      opacity: 0.4;
+      outline: none;
+    }
+    &::-ms-thumb {
+      opacity: 0.4;
+      outline: none;
+    }
+  }
+
+  // HOVER
+  .gg-control-delete:hover,
+  .gg-control-value:hover {
+    opacity: 1;
+  }
+  .gg-control-position:hover {
+    &::-webkit-slider-thumb {
+      opacity: 1;
+    }
+    &::-moz-range-thumb {
+      opacity: 1;
+    }
+    &::-ms-thumb {
+      opacity: 1;
+    }
+  }
+
+  // FOCUS
+  .gg-control-delete:focus,
+  .gg-control-value:focus {
+    /* outline: 1px auto #101010; */
+    opacity: 1;
+    filter: brightness(0.9);
+  }
+  .gg-control-position:focus {
+    outline: none;
+
+    &::-webkit-slider-thumb {
+      opacity: 1;
+      filter: brightness(0.9);
+    }
+    &::-moz-range-thumb {
+      opacity: 1;
+      filter: brightness(0.9);
+    }
+    &::-ms-thumb {
+      opacity: 1;
+      filter: brightness(0.9);
+    }
+  }
+}

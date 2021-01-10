@@ -32,5 +32,8 @@
   "author": "Edison Peñuela <edisonpe961206@hotmail.com>",
   "description": "Generator of a gradiant with user interface",
   "keywords": [],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "style-loader": "^2.0.0"
+  }
 }
