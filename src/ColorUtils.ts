@@ -1,9 +1,17 @@
 import { colorPos, colorRGB } from './Types';
 
-function cutHex(h: string) {
-  return h.charAt(0) == '#' ? h.substring(1, 7) : h;
+/**
+ * Separate the head (#) from the color string
+ * @param hex String of Color in hexadecimal format
+ */
+function cutHex(hex: string): string {
+  return hex.charAt(0) == '#' ? hex.substring(1, 7) : hex;
 }
 
+/**
+ * Transform an color string in hexadecimal to a rgb object
+ * @param hex String of Color in hexadecimal format
+ */
 export function hexToRGb(hex: string): colorRGB {
   return {
     r: parseInt(cutHex(hex).substring(0, 2), 16),
@@ -12,6 +20,10 @@ export function hexToRGb(hex: string): colorRGB {
   };
 }
 
+/**
+ * Transform an rgb object to a color string in hexadecimal
+ * @param rgb object that represents a color in RGB
+ */
 export function rgbToHex(rgb: colorRGB): string {
   let r = rgb.r.toString(16);
   let g = rgb.g.toString(16);
@@ -24,7 +36,12 @@ export function rgbToHex(rgb: colorRGB): string {
   return `#${r}${g}${b}`;
 }
 
-export function getIntermediateColor(hex1: string, hex2: string) {
+/**
+ * Calculate the intermediate color between two colors
+ * @param hex1 String of first Color in hexadecimal format
+ * @param hex2 String of second Color in hexadecimal format
+ */
+export function getIntermediateColor(hex1: string, hex2: string): string {
   const rgb1 = hexToRGb(hex1);
   const rgb2 = hexToRGb(hex2);
 
@@ -37,8 +54,12 @@ export function getIntermediateColor(hex1: string, hex2: string) {
   return rgbToHex(newRGB);
 }
 
-// https://codepen.io/davidhalford/pen/ywEva?editors=0010
-export function getCorrectTextColor(hex: string) {
+/**
+ * Get a correct text color according to the contrast
+ * @param hex String of the base Color in hexadecimal format
+ */
+export function getCorrectTextColor(hex: string): string {
+  // https://codepen.io/davidhalford/pen/ywEva?editors=0010
   /* about half of 256. Lower threshold equals more dark text on dark background  */
   const threshold = 130;
 
@@ -52,7 +73,15 @@ export function getCorrectTextColor(hex: string) {
   }
 }
 
-export function createGradient(gradientColors: colorPos[], size: number = 100) {
+/**
+ * Generates an array of colors in hexadecimal format based on the base color list and the number of expected colors
+ * @param gradientColors List of colors with their respective proportional position
+ * @param size Expected number of colors generated
+ */
+export function createGradient(
+  gradientColors: colorPos[],
+  size: number = 100
+): string[] {
   const response = [];
   for (let i = 0; i < gradientColors.length - 1; i++) {
     const color1 = gradientColors[i];
@@ -92,15 +121,3 @@ export function createGradient(gradientColors: colorPos[], size: number = 100) {
 
   return response;
 }
-
-// function sortByKey(key: string): Function {
-//   return function compare(current: any, next: any) {
-//     if (current[key] < next[key]) {
-//       return -1;
-//     }
-//     if (current[key] > next[key]) {
-//       return 1;
-//     }
-//     return 0;
-//   };
-// }

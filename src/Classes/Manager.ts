@@ -12,7 +12,7 @@ export class GeneratorManager {
   private cacheGradientColors: colorPos[] = [];
   private options: ManagerOptions = { keepChanges: true };
 
-  constructor(private generator: GradientGenerator, options: ManagerOptions) {
+  constructor(private generator: GradientGenerator, options?: ManagerOptions) {
     if (!generator) throw new Error('A Gradient Generator must be provided');
     this.options = { ...this.options, ...options };
 
@@ -23,13 +23,10 @@ export class GeneratorManager {
     mainElement.addEventListener('click', (ev: MouseEvent) => {
       if (this.addMode) {
         const gradientColors = this.generator.getGradientColors();
+
         const cantColors = gradientColors.length;
-
-        const totalLenght = mainElement.clientWidth;
-        const newPosition = (ev.offsetX * 100) / totalLenght;
-
+        const newPosition = (ev.offsetX * 100) / mainElement.clientWidth;
         const indx = gradientColors.findIndex(gc => gc.position > newPosition);
-        // indx = (indx === -1) ? cantColors : indx;
 
         let color1 = '#000000';
         let color2 = '#ffffff';
@@ -50,10 +47,7 @@ export class GeneratorManager {
         };
 
         generator.append(newColorPos, indx);
-
-        mainElement.classList.remove('gg-add');
-        this.addMode = false;
-
+        this.cancelAddMode();
         if (this.options.keepChanges) {
           this.cacheGradientColors = gradientColors;
         }
@@ -61,31 +55,43 @@ export class GeneratorManager {
     });
   }
 
+  /**
+   * Activates the mode of adding new colors on click over the gradient generator main element
+   */
   public setAddMode() {
     this.addMode = true;
     const mainElement = this.generator.getMainElement();
-    mainElement.classList.toggle('gg-add');
+    mainElement.classList.add('gg-add');
   }
 
+  /**
+   * Cancel the mode of adding new colors on the main element of the generator
+   */
   public cancelAddMode() {
     this.addMode = false;
     const mainElement = this.generator.getMainElement();
     mainElement.classList.remove('gg-add');
   }
 
-  public restoreColors() {
-    this.cancelAddMode();
-
-    if (!this.options.keepChanges) {
-      this.generator.setGradientColors(this.cacheGradientColors);
-    }
-  }
-
+  /**
+   * Save the changes and new colors when keepChanges option is false
+   */
   public saveColors() {
     this.cancelAddMode();
 
     if (!this.options.keepChanges) {
       this.cacheGradientColors = this.generator.getGradientColors();
+    }
+  }
+
+  /**
+   * Delete changes and new colors when keep changes option is false
+   */
+  public restoreColors() {
+    this.cancelAddMode();
+
+    if (!this.options.keepChanges) {
+      this.generator.setGradientColors(this.cacheGradientColors);
     }
   }
 }

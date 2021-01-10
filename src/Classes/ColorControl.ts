@@ -3,6 +3,9 @@ import { getCorrectTextColor } from '../ColorUtils';
 
 const e = document.createElement.bind(document);
 
+/**
+ * Helper to ceate the delete button of the color control
+ */
 function createDeleteControl(): HTMLElement {
   const deleteEl = e('button');
   deleteEl.className = 'gg-control-delete';
@@ -10,7 +13,10 @@ function createDeleteControl(): HTMLElement {
   return deleteEl;
 }
 
-function createPositionControl(defaultValue: string) {
+/**
+ * Helper to ceate the position input of the color control
+ */
+function createPositionControl(defaultValue: string): HTMLInputElement {
   const positionEl = e('input');
   positionEl.className = 'gg-control-position';
   positionEl.type = 'range';
@@ -23,7 +29,10 @@ function createPositionControl(defaultValue: string) {
   return positionEl;
 }
 
-function createValueControl(defaultValue: string) {
+/**
+ * Helper to ceate the color value input of the color control
+ */
+function createValueControl(defaultValue: string): HTMLInputElement {
   const valueEl = e('input');
   valueEl.className = 'gg-control-value';
   valueEl.type = 'color';
@@ -75,20 +84,30 @@ export class ColorControl {
     });
   }
 
-  // Getters
+  /**
+   * Get the main element for this control
+   */
   public get Element(): HTMLElement {
     return this.mainElement;
   }
 
+  /**
+   * Get the color selected in hexadecimal format
+   */
   public get ColorHex(): string {
     return this.valueEl.value;
   }
 
+  /**
+   * Get the proportional position of this control
+   */
   public get Position(): number {
     return this.positionEl.valueAsNumber;
   }
 
-  // Inherit Actions
+  /**
+   * Update the position of the delete and value inputs
+   */
   private changePosition() {
     const pos = this.positionEl.valueAsNumber;
     const totalLenght = this.positionEl.clientWidth;
@@ -98,6 +117,9 @@ export class ColorControl {
     this.valueEl.style.setProperty('--pos-left', left);
   }
 
+  /**
+   * Change the background color with respect the value input
+   */
   private changeBg() {
     const color = this.valueEl.value;
 
@@ -108,20 +130,35 @@ export class ColorControl {
     this.positionEl.style.setProperty('--color', getCorrectTextColor(color));
   }
 
-  // Events
-  public onDelete(cb: Function) {
+  /**
+   * Add an event listener when delete element
+   * @param cb Callback
+   */
+  public onDelete(cb: (ev: MouseEvent) => void) {
     this.deleteEl.addEventListener('click', (ev: MouseEvent) => cb(ev));
   }
 
-  public onPositionChange(cb: Function) {
+  /**
+   * Add an event listener when the control change it position
+   * @param cb Callback
+   */
+  public onPositionChange(cb: (ev: Event) => void) {
     this.positionEl.addEventListener('input', (ev: Event) => cb(ev));
   }
 
-  public onColorChange(cb: Function) {
+  /**
+   * Add an event listener when the control change it color value
+   * @param cb Callback
+   */
+  public onColorChange(cb: (ev: Event) => void) {
     this.valueEl.addEventListener('input', (ev: Event) => cb(ev));
   }
 
-  // Add limits
+  /**
+   * Assign the proportional position limits of this color control
+   * @param minlimit lower limit of the position input
+   * @param maxlimit upper limit of the position input
+   */
   public setPositionLimits(minlimit: number, maxlimit: number) {
     this.positionEl.dataset.min = minlimit.toString();
     this.positionEl.dataset.max = maxlimit.toString();

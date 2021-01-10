@@ -1,5 +1,4 @@
 import { colorPos } from '../Types';
-
 import { ColorControl } from './ColorControl';
 
 const initialGradientColors: colorPos[] = [
@@ -27,6 +26,10 @@ export class GradientUI {
     this.init(initialColors);
   }
 
+  /**
+   * Initialize the UI creating the controls for each color in the list
+   * @param initialColors List of colors with their respective proportional position
+   */
   public init(initialColors: colorPos[]) {
     // Config Main Element
     this.mainElement.classList.add('gg-container');
@@ -45,12 +48,20 @@ export class GradientUI {
     });
   }
 
-  public getGradientControls() {
+  /**
+   * Get the list of color controls in the UI
+   */
+  public getGradientControls(): ColorControl[] {
     return this.gradientControls;
   }
 
-  public addElement(obj: colorPos, indx = -1) {
-    const newControl: ColorControl = new ColorControl(obj);
+  /**
+   * Add a new color control and add their respective listeners
+   * @param color A single colors with their respective proportional position
+   * @param indx Optional position to append in the UI
+   */
+  public addElement(color: colorPos, indx = -1) {
+    const newControl: ColorControl = new ColorControl(color);
     const newElement = newControl.Element;
 
     if (this.gradientControls[indx]) {
@@ -83,6 +94,9 @@ export class GradientUI {
     this.changeGradientBg();
   }
 
+  /**
+   * Change the background gradient respect to the color controls
+   */
   public changeGradientBg() {
     if (this.gradientControls.length > 0) {
       const intermediateColors = this.gradientControls
@@ -103,6 +117,9 @@ export class GradientUI {
     }
   }
 
+  /**
+   * Update the position limits for each color control with respect to the others
+   */
   public updatePositionsLimits() {
     let minlimit = 0;
     let maxlimit = 100;
