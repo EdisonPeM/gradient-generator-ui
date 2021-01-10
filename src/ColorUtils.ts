@@ -52,11 +52,6 @@ export function getCorrectTextColor(hex: string) {
   }
 }
 
-/**
- *
- * @param gradientColors List of colors and position
- * @param size cant of color in the gradient
- */
 export function createGradient(gradientColors: colorPos[], size: number = 100) {
   const response = [];
   for (let i = 0; i < gradientColors.length - 1; i++) {
@@ -72,19 +67,23 @@ export function createGradient(gradientColors: colorPos[], size: number = 100) {
       const color2RGB: colorRGB = hexToRGb(color2.colorHex);
 
       const deltaRGB = {
-        r: Math.round((color2RGB.r - color1RGB.r) / cantSubColors),
-        g: Math.round((color2RGB.g - color1RGB.g) / cantSubColors),
-        b: Math.round((color2RGB.b - color1RGB.b) / cantSubColors),
+        r: Math.trunc((color2RGB.r - color1RGB.r) / cantSubColors),
+        g: Math.trunc((color2RGB.g - color1RGB.g) / cantSubColors),
+        b: Math.trunc((color2RGB.b - color1RGB.b) / cantSubColors),
       };
 
       for (let sc = 1; sc < cantSubColors; sc++) {
-        const nextColor = rgbToHex({
-          r: Math.round(color1RGB.r + sc * deltaRGB.r),
-          g: Math.round(color1RGB.g + sc * deltaRGB.g),
-          b: Math.round(color1RGB.b + sc * deltaRGB.b),
-        });
+        const nextColorRGB: colorRGB = {
+          r: Math.trunc(color1RGB.r + sc * deltaRGB.r),
+          g: Math.trunc(color1RGB.g + sc * deltaRGB.g),
+          b: Math.trunc(color1RGB.b + sc * deltaRGB.b),
+        };
 
-        response.push(nextColor);
+        const nextColor = rgbToHex(nextColorRGB);
+
+        if (nextColor.length === 7) {
+          response.push(nextColor);
+        }
       }
 
       response.push(color2.colorHex);

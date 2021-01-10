@@ -13,8 +13,15 @@ cancelBtn.addEventListener('click', () => {
   myGenManager.restoreColors();
 });
 
+const acceptBtn = document.getElementById('accept');
+acceptBtn.addEventListener('click', () => {
+  myGenManager.saveColors();
+});
+
 const getColorsBtn = document.getElementById('getColors');
 getColorsBtn.addEventListener('click', () => {
   const colors = myColorGen.generateColors();
-  console.log(colors);
+  colors.forEach(color => {
+    console.log(color.length);
+  });
 });

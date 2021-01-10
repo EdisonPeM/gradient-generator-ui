@@ -1,16 +1,19 @@
-import { colorPos } from './Types';
+import { colorPos } from '../Types';
+import { createGradient } from '../ColorUtils';
 
-import { ColorControl } from './ColorControl';
-import { createGradient } from './ColorUtils';
-import { GeneratorManager, ManagerOptions } from './Manager';
 import { GradientUI } from './GradientUI';
+import { ColorControl } from './ColorControl';
+import { GeneratorManager, ManagerOptions } from './Manager';
 
 export class GradientGenerator {
   private UI: GradientUI;
 
-  constructor(private mainElement: HTMLElement) {
+  constructor(
+    private mainElement: HTMLElement,
+    initialColors?: colorPos[]
+  ) {
     if (!mainElement) throw new Error('Root element must be provided');
-    this.UI = new GradientUI(mainElement);
+    this.UI = new GradientUI(mainElement, initialColors);
   }
 
   public getMainElement(): HTMLElement {

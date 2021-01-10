@@ -1,5 +1,5 @@
-import { colorPos } from './Types';
-import { getCorrectTextColor } from './ColorUtils';
+import { colorPos } from '../Types';
+import { getCorrectTextColor } from '../ColorUtils';
 
 const e = document.createElement.bind(document);
 

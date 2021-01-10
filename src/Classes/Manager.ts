@@ -1,7 +1,7 @@
-import { getIntermediateColor } from './ColorUtils';
-import { GradientGenerator } from './Generator';
+import { colorPos } from '../Types';
+import { getIntermediateColor } from '../ColorUtils';
 
-import { colorPos } from './Types';
+import { GradientGenerator } from './Generator';
 
 export type ManagerOptions = {
   keepChanges?: boolean;
