@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examples of Gradient Generator</title>
+
+  <!-- Gradient Generator Styles -->
+  <link rel="stylesheet" href="https://unpkg.com/gradient-generator-ui@1.0.0/dist/gradient-generator.css" crossorigin>
+  <style>
+    .manager-buttons {
+      text-align: center;
+    }
+
+    .btn {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px;
+      font-size: 0.9em;
+      border: none;
+      border-radius: 1em;
+      background-color: rgb(0, 162, 255);
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <ul>
+      <li><a href="../basicUsage">Basic Usage</a></li>
+      <li><a href="../withManager/">Use with manager</a></li>
+      <li><a href="../withoutUI/">Use without main element</a></li>
+    </ul>
+  </nav>
+  <h1>Gradient Generator with a Manager</h1>
+  <div id="gradient-root"></div>
+  <div class="manager-buttons">
+    <button id="add">Add</button>
+    <button id="cancel">Cancel</button>
+    <button id="accept">Accept</button>
+    <button id="getColors">Generate Colors</button>
+  </div>
+  <div id="output"></div>
+
+  <!-- Gradient Generator Script -->
+  <script src="https://unpkg.com/gradient-generator-ui@1.0.0/dist/gradient-generator.js" crossorigin></script>
+  <script src="./script.js"></script>
+</body>
+
+</html>
