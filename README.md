@@ -24,10 +24,10 @@ Or with CDN links
 
 ```HTML
 <!-- Style -->
-<link rel="stylesheet" href="https://unpkg.com/gradient-generator-ui@1.0.3/dist/gradient-generator.css" crossorigin>
+<link rel="stylesheet" href="https://unpkg.com/gradient-generator-ui@1.0.4/dist/gradient-generator.css" crossorigin>
 
 <!-- Script -->
-<script src="https://unpkg.com/gradient-generator-ui@1.0.3/dist/gradient-generator.js" crossorigin ></script>
+<script src="https://unpkg.com/gradient-generator-ui@1.0.4/dist/gradient-generator.js" crossorigin ></script>
 ```
 
 ## Basic Usage
