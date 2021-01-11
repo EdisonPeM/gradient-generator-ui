@@ -3,6 +3,7 @@
   "version": "1.0.3",
   "main": "lib/index.js",
   "unpkg": "dist/gradient-generator.js",
+  "types": "./lib/index.d.ts",
   "sideEffects": false,
   "scripts": {
     "build": "yarn build:dist && yarn build:lib",
