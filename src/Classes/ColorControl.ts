@@ -1,5 +1,5 @@
 import { colorPos } from '../Types';
-import { getCorrectTextColor } from '../ColorUtils';
+import { normalizeHex, getCorrectTextColor } from '../ColorUtils';
 
 const e = document.createElement.bind(document);
 
@@ -54,7 +54,7 @@ export class ColorControl {
     // Create delete button
     this.deleteEl = createDeleteControl();
     // Create value color input
-    this.valueEl = createValueControl(color.colorHex);
+    this.valueEl = createValueControl(`#${normalizeHex(color.colorHex)}`);
     // Create position range input
     this.positionEl = createPositionControl(color.position.toString());
     this.positionEl.addEventListener('input', function (ev) {
@@ -111,7 +111,7 @@ export class ColorControl {
   private changePosition() {
     const pos = this.positionEl.valueAsNumber;
     const totalLenght = this.positionEl.clientWidth;
-    const left = `${((totalLenght - 15) * pos) / 100 + 15 / 2}px`;
+    const left = `${((totalLenght - 16) * pos) / 100 + 16 / 2}px`;
 
     this.deleteEl.style.setProperty('--pos-left', left);
     this.valueEl.style.setProperty('--pos-left', left);

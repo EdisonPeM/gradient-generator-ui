@@ -4,11 +4,9 @@ import { colorPos, colorRGB } from './Types';
  * Normalize the hexadecimal color Separate the head (#) and transform 3digits to 6
  * @param hex String of Color in hexadecimal format
  */
-function normalizeHex(hex: string): string {
+export function normalizeHex(hex: string): string {
   const match7 = hex.match(/\w{6}$/);
   if (match7 !== null) {
-    console.log(match7[0]);
-
     return match7[0];
   }
 
@@ -105,7 +103,7 @@ export function createGradient(
     const cantSubColors = (color2.position - color1.position) * (size / 100);
 
     if (cantSubColors > 0) {
-      if (i === 0) response.push(color1.colorHex);
+      if (i === 0) response.push(`#${normalizeHex(color1.colorHex)}`);
 
       const color1RGB: colorRGB = hexToRGb(color1.colorHex);
       const color2RGB: colorRGB = hexToRGb(color2.colorHex);
@@ -130,7 +128,7 @@ export function createGradient(
         }
       }
 
-      response.push(color2.colorHex);
+      response.push(`#${normalizeHex(color2.colorHex)}`);
     }
   }
 

@@ -19,9 +19,13 @@ acceptBtn.addEventListener('click', () => {
 });
 
 const getColorsBtn = document.getElementById('getColors');
+const output = document.getElementById('output');
+
 getColorsBtn.addEventListener('click', () => {
-  const colors = myColorGen.generateColors();
-  colors.forEach(color => {
-    console.log(color.length);
+  const colors = myColorGen.generateColors(10);
+  output.innerHTML = '<ul>';
+  colors.forEach(colorHex => {
+    output.innerHTML += `<li>${colorHex}</li>`;
   });
+  output.innerHTML += '</ul>';
 });
