@@ -21,7 +21,7 @@ export class GradientGenerator {
     initialColors = initialGradientColors,
   }: {
     mainElement?: HTMLElement;
-    initialColors: colorPos[];
+    initialColors?: colorPos[];
   }) {
     if (mainElement) {
       this.mainElement = mainElement;
