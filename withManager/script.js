@@ -5,7 +5,7 @@ const myGenManager = myColorGen.createUIManager({ keepChanges: false });
 
 const addBtn = document.getElementById('add');
 addBtn.addEventListener('click', () => {
-  myGenManager.setAddMode();
+  myGenManager.activateAddMode();
 });
 
 const cancelBtn = document.getElementById('cancel');
