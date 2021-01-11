@@ -6,18 +6,9 @@ import { ColorControl } from './ColorControl';
 import { GeneratorManager, ManagerOptions } from './Manager';
 
 const initialGradientColors: colorPos[] = [
-  {
-    colorHex: '#ff0000',
-    position: 10,
-  },
-  {
-    colorHex: '#ffff00',
-    position: 40,
-  },
-  {
-    colorHex: '#00ff77',
-    position: 70,
-  },
+  { colorHex: '#ff0000', position: 10 },
+  { colorHex: '#ffff00', position: 40 },
+  { colorHex: '#00ff77', position: 70 },
 ];
 
 export class GradientGenerator {
@@ -61,7 +52,7 @@ export class GradientGenerator {
    * Get the list of colors with their respective proportional position
    */
   public getGradientColors(): colorPos[] {
-    return this.colors;
+    return [...this.colors];
   }
 
   /**
@@ -69,7 +60,7 @@ export class GradientGenerator {
    * @param colors List of colors with their respective proportional position
    */
   public setGradientColors(colors: colorPos[]) {
-    this.colors = colors;
+    this.colors = [...colors];
     if (this.UI) this.UI.init(colors);
   }
 
@@ -78,15 +69,17 @@ export class GradientGenerator {
    * @param color A single colors with their respective proportional position
    * @param indx Optional position to append in the GradientGenerator
    */
-  public append(newColor: colorPos) {
-    const indx = this.colors.findIndex(gc => gc.position > newColor.position);
-    if (indx > -1) {
-      this.colors.splice(indx, 0, newColor);
-    } else {
-      this.colors.push(newColor);
-    }
+  public addColors(...newColors: colorPos[]) {
+    newColors.forEach(newColor => {
+      const indx = this.colors.findIndex(gc => gc.position > newColor.position);
+      if (indx > -1) {
+        this.colors.splice(indx, 0, newColor);
+      } else {
+        this.colors.push(newColor);
+      }
 
-    if (this.UI) this.UI.addElement(newColor);
+      if (this.UI) this.UI.addElement(newColor);
+    });
   }
 
   /**
@@ -114,6 +107,9 @@ export class GradientGenerator {
    * @param options Manager options
    */
   public createUIManager(options: ManagerOptions): GeneratorManager {
-    return new GeneratorManager(this, options);
+    return new GeneratorManager({
+      ...options,
+      generator: this,
+    });
   }
 }

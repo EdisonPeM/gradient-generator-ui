@@ -4,17 +4,20 @@ import { getIntermediateColor } from '../ColorUtils';
 import { GradientGenerator } from './Generator';
 
 export type ManagerOptions = {
+  generator: GradientGenerator;
   keepChanges?: boolean;
 };
 
 export class GeneratorManager {
+  private generator: GradientGenerator;
   private addMode: boolean = false;
   private cacheGradientColors: colorPos[] = [];
-  private options: ManagerOptions = { keepChanges: true };
+  private keepChanges: boolean;
 
-  constructor(private generator: GradientGenerator, options?: ManagerOptions) {
+  constructor({ generator, keepChanges = true }: ManagerOptions) {
     if (!generator) throw new Error('A Gradient Generator must be provided');
-    this.options = { ...this.options, ...options };
+    this.generator = generator;
+    this.keepChanges = keepChanges;
 
     const mainElement = this.generator.getMainElement();
     this.cacheGradientColors = this.generator.getGradientColors();
@@ -34,14 +37,14 @@ export class GeneratorManager {
         const color1 = gradientColors[indx - 1].colorHex;
         const color2 = gradientColors[indx].colorHex;
 
-        generator.append({
+        generator.addColors({
           colorHex: getIntermediateColor(color1, color2),
           position: newPosition,
         });
 
         this.cancelAddMode();
-        if (this.options.keepChanges) {
-          this.cacheGradientColors = gradientColors;
+        if (this.keepChanges) {
+          this.cacheGradientColors = this.generator.getGradientColors();
         }
       }
     });
@@ -50,7 +53,7 @@ export class GeneratorManager {
   /**
    * Activates the mode of adding new colors on click over the gradient generator main element
    */
-  public setAddMode() {
+  public activateAddMode() {
     this.addMode = true;
     const mainElement = this.generator.getMainElement();
     mainElement.classList.add('gg-add');
@@ -71,7 +74,7 @@ export class GeneratorManager {
   public saveColors() {
     this.cancelAddMode();
 
-    if (!this.options.keepChanges) {
+    if (!this.keepChanges) {
       this.cacheGradientColors = this.generator.getGradientColors();
     }
   }
@@ -82,7 +85,7 @@ export class GeneratorManager {
   public restoreColors() {
     this.cancelAddMode();
 
-    if (!this.options.keepChanges) {
+    if (!this.keepChanges) {
       this.generator.setGradientColors(this.cacheGradientColors);
     }
   }

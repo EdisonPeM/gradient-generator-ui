@@ -1,5 +1,10 @@
 .gg-container {
-  height: 100px;
+  &,
+  * {
+    box-sizing: border-box;
+  }
+
+  min-height: 150px;
   padding: 3em 0;
 
   display: grid;
@@ -9,9 +14,4 @@
   border: 1px solid #aaa;
 
   overflow: hidden;
-
-  &,
-  * {
-    box-sizing: border-box;
-  }
 }
